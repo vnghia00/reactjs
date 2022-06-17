@@ -1,0 +1,13 @@
+@import "../styles/common.scss";
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+html {
+    color: #333;
+    font-family: "Open Sans", sans-serif;
+}
+.content-container {
+    // margin-top: 40px;
+}
