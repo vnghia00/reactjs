@@ -5,6 +5,7 @@ export const path = {
     // LOG_OUT: '/chu-nha-hang/logout',
     // SYSTEM: '/chu-nha-hang/system',
     HOME: '/chu-nha-hang',
+    FORGOT: '/forgot',
     LOGIN: '/login',
     LOG_OUT: 'logout',
     SYSTEM: '/system',

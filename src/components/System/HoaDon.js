@@ -6,6 +6,7 @@ import { getAllMA, deleteMA, createNewMA, updateMA, updateBA, getCTHD, updateTTH
 import { toast } from "react-toastify";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
+import "./MonAn.scss"
 import * as actions from "../../store/actions";
 import { CSVLink } from "react-csv";
 import thunk from "redux-thunk";
@@ -54,7 +55,11 @@ class HoaDon extends Component {
 			filter: {
 				trangThaiHD: 1,
 				ngayNhap: ""
-			}
+			},
+			limit: 10,
+			skip: 0,
+			page: [],
+			css: "1"
 		};
 		this.textInput = React.createRef();
 		this.focus = this.focus.bind(this);
@@ -100,9 +105,13 @@ class HoaDon extends Component {
 		if (prevProps.HDRedux !== this.props.HDRedux) {
 			const date = new Date();
 			const today = date.toISOString();
+			let p = []
+			for (let index = 0; index < Math.ceil(arr3.length / this.state.limit); index++) {
+				p = [...p, index+1]
+			}
 			this.setState({
 				arrHD: arr3,
-
+				page: p,
 				idBanAn: arr[0]?.id||"",
 				ngayNhap: today,
 				tenKhachHang: "",
@@ -191,7 +200,6 @@ class HoaDon extends Component {
 			return "Văn Nghĩa"
 		}else{
 			for (let index = 0; index < this.props.listNV.length; index++) {
-				console.log(this.props.listNV[index].tenNV);
 				if (id === this.props.listNV[index].id) {
 					return this.props.listNV[index].tenNV;
 				}
@@ -262,9 +270,7 @@ class HoaDon extends Component {
 		const ba = await updateBA(banan)
 		this.props.getBanAnStart();
 
-
 		const ct = await getCTHD(data.id)
-		console.log("aaaaaaaa",ct);
 		let tm = []
 		let idMonAn = []
 		let soLuong = []
@@ -364,12 +370,36 @@ class HoaDon extends Component {
 		const anh = new Buffer(linkImg[0].hinhAnh,'base64').toString('binary')
 		return anh;
 	}
-	
+	handlePage = (e) => {
+		console.log((parseInt(e.target.innerText) * this.state.limit),"aaaaaaaaa");
+		this.setState({
+			skip: ((parseInt(e.target.innerText)-1) * this.state.limit),
+			css: e.target.innerText
+		})
+
+	}
 	render() {
 		var formatter = new Intl.NumberFormat("en-US", {
 			style: "currency",
 			currency: "VND",
 		});
+		const copyState = [...this.state.arrHD].filter((item)=>{
+			for (var key in this.state.filter) {
+				if(this.state.filter[key] != ""){
+					if (key == "ngayNhap") {
+						if (item[key].slice(0, 10) != this.state.filter[key]){
+							return false;
+						}
+					}else{
+						if (item[key] != this.state.filter[key]){
+							return false;
+						}
+					}
+				}
+			}
+			return true;
+		})
+		var hdarr = copyState.splice(this.state.skip, 10)
 		console.log(this.state);
 		return (
 			<div className="chuc-vu-container">
@@ -724,7 +754,7 @@ class HoaDon extends Component {
 											}}
 										>
 											<CSVLink className="btn btn-warning ms-3 ps-2 pe-2" data={this.state.data} headers={this.state.headers}>
-												Tải hoá đơn
+												Xuẩt hoá đơn
 											</CSVLink>
 										</div>
 									</>
@@ -751,6 +781,7 @@ class HoaDon extends Component {
 								<table className=" col-12 ">
 									<tbody>
 										<tr>
+											<th>Stt</th>
 											<th>Mã hoá đơn</th>
 											<th>Tên khách hàng</th>
 											<th>Người tạo</th>
@@ -768,6 +799,7 @@ class HoaDon extends Component {
 											}).map((item, index) => {
 												return (
 													<tr key={index}>
+														<td>{index+1}</td>
 														<td>{item.id}</td>
 														<td>{item.tenKhachHang||'trống'}</td>
 														<td
@@ -856,6 +888,7 @@ class HoaDon extends Component {
 								<table className=" col-12 ">
 									<tbody>
 										<tr>
+											<th>Stt</th>
 											<th>Mã hoá đơn</th>
 											<th>Tên khách hàng</th>
 											<th>Người tạo</th>
@@ -867,26 +900,11 @@ class HoaDon extends Component {
 											<th>Trạng thái</th>
 											<th>Thao tác</th>
 										</tr>
-										{this.state.arrHD?.length > 0 &&
-											this.state.arrHD.filter((item)=>{
-												for (var key in this.state.filter) {
-													if(this.state.filter[key] != ""){
-														if (key == "ngayNhap") {
-															if (item[key].slice(0, 10) != this.state.filter[key]){
-																return false;
-															}
-														}else{
-															if (item[key] != this.state.filter[key]){
-																return false;
-															}
-														}
-													}
-												}
-												return true;
-												// return (item.trangThaiHD == 1 && item.ngayNhap.slice(0,19) == "2022-06-14")
-											}).map((item, index) => {
+										{hdarr?.length > 0 &&
+											hdarr.map((item, index) => {
 												return (
 													<tr key={index}>
+														<td>{index+1}</td>
 														<td>{item.id}</td>
 														<td>{item.tenKhachHang||'trống'}</td>
 														<td
@@ -899,7 +917,7 @@ class HoaDon extends Component {
 														<td>{formatter.format(item.giamGia)}</td>
 														<td>{formatter.format(item.tongTien)}</td>
 														<td>{item.ngayNhap.toString().slice(0, 10)}</td>
-														<td>
+														<td style={{color: '#1000ff'}} >
 															{item.trangThaiHD == 0
 																? "Chưa thanh toán"
 																: "Đã thanh toán"}
@@ -936,9 +954,33 @@ class HoaDon extends Component {
 														</td>
 													</tr>
 												);
-											})}
+											})
+											}
 									</tbody>
 								</table>
+								<div className="col-12"
+									style={{
+										display: 'flex',
+										justifyContent:'center',
+										marginTop: '1rem'
+									}}
+								>
+									{
+										this.state.page.map((item, index)=>{
+											return <span key = {index} onClick={(e) => this.handlePage(e)} 
+											className={this.state.css == item? "act-page" :""}
+												style={{
+													fontSize:'1.2rem',
+													color:"blue",
+													marginRight : '10px',
+													cursor:"pointer",
+													textAlign:'center',
+													textDecorationLine: "underline",
+												}}
+											>{item}</span>
+										})
+									}
+								</div>
 							</div>
 						</div>
 					</div>

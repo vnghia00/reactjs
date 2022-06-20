@@ -143,11 +143,9 @@ class Login extends Component {
           </button>
 
           <div className="form-group forgot">
-            {/* <a href={path.HOM_PAGE}  > */}
-              <Link to = {path.HOM_PAGE} >
-                <span>Forgot your password?</span>
+              <Link to = {path.FORGOT} >
+                <span>Quên mật khẩu?</span>
               </Link>
-            {/* </a> */}
           </div>
           {/* </form> */}
         </div>
@@ -165,7 +163,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigate: (path) => dispatch(push(path)),
-    // userLoginFail: () => dispatch(actions.adminLoginFail()),
     userLoginSuccess: (userInfo) =>
       dispatch(actions.userLoginSuccess(userInfo)),
   };

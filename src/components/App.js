@@ -13,6 +13,7 @@ import {path} from "../utils";
 import HomePage from "./HomePage/HomePage";
 import Home from "../routes/Home";
 import Login from "./Auth/Login";
+import Forgot from "./Auth/Forgot";
 import System from "../routes/System";
 import {CustomToastCloseButton} from "../components/CustomToast/CustomToast";
 import CustomScrollbars from "../components/CustomToast/CustomScrollbars";
@@ -46,8 +47,8 @@ class App extends Component {
             <div className="content-container">
               <CustomScrollbars>
                 <Switch>
+                  <Route path={path.FORGOT} exact component={Forgot} />
                   <Route path={path.HOM_PAGE} exact component={Home} />
-                  {/* <Route path={path.HOME} exact component={Home} /> */}
                   <Route
                     path={path.LOGIN}
                     component={userIsNotAuthenticated(Login)}

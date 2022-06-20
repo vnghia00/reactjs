@@ -72,6 +72,10 @@ export const adminMenu = [
 				name: "menu.system.statistic-revenue-table",
 				link: path.SYSTEM + "/thong-ke-ban",
 			},
+			// {
+			// 	name: "menu.system.statistic-revenue-food",
+			// 	link: path.SYSTEM + "/thong-ke-mon",
+			// },
 		],
 	},
 ];

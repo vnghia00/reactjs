@@ -9,7 +9,7 @@ import ReactApexChart from "react-apexcharts";
 import * as actions from "../../store/actions";
 import ThongKeDTNam from "./ThongKeDTNam";
 
-class ThongKeBanAn extends Component {
+class ThongKeMonAn extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -471,4 +471,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ThongKeBanAn);
+export default connect(mapStateToProps, mapDispatchToProps)(ThongKeMonAn);

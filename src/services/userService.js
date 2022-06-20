@@ -3,6 +3,14 @@ import axios from "../axios";
 const handleLoginAPI = (email, password) => {
 	return axios.post("/api/login-admin", { email, password });
 };
+
+const handleForgotAPI = (email) => {
+	return axios.post("/api/forgot", { email });
+};
+const handleChechCode = (email,code,password) => {
+	return axios.post("/api/check-code", { email,code,password });
+};
+
 const getAllUsers = (inputId) => {
 	return axios.get("/api/get-all-users", { params: { id: inputId } });
 };
@@ -123,11 +131,12 @@ export {
 	createNewUserSV,
 	deleteUserSV,
 	updateUser,
-
+	handleForgotAPI,
 	getAllCV,
 	deleteChucVu,
 	createNewCV,
 	updateCV,
+	handleChechCode,
 
 	getAllDM,
 	deleteDM,

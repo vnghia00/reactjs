@@ -14,6 +14,7 @@ import HoaDon from "../components/System/HoaDon";
 import DanhMucMA from "../components/System/DanhMucMA";
 import ThongKe from "../components/System/ThongKe";
 import ThongKeBanAn from "../components/System/ThongKeBanAn";
+import ThongKeMonAn from "../components/System/ThongKeMonAn";
 
 class System extends Component {
 	render() {
@@ -34,6 +35,7 @@ class System extends Component {
 							<Route path={path.SYSTEM + "/danh-muc-mon-an"} component={DanhMucMA} />
 							<Route path={path.SYSTEM + "/thong-ke"} component={ThongKe} />
 							<Route path={path.SYSTEM + "/thong-ke-ban"} component={ThongKeBanAn} />
+							<Route path={path.SYSTEM + "/thong-ke-mon"} component={ThongKeMonAn} />
 
 							<Route
 								path={path.SYSTEM + "/kho-nguyen-lieu"}
